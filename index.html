@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Babushka</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="splash">
+        <img src="images/splash2.png" alt="splash">
+        <h1>
+            Babushka
+        </h1>
+    </div>
+
+    <nav>
+        <button data-kategori="alle" class="valgt">Alle</button>
+        <button data-kategori="forretter" class="valgt">Forretter</button>
+        <button data-kategori="hovedretter" class="valgt">Hovedretter</button>
+        <button data-kategori="desserter" class="valgt">Desserter</button>
+        <button data-kategori="sideorders" class="valgt">Sides</button>
+        <button data-kategori="drikkevarer" class="valgt">Drikkevarer</button>
+    </nav>
+
+    <main></main>
+
+    <template>
+        <article>
+            <img src="" alt="" class="billede">
+            <h2 class="navn"></h2>
+            <p class="kategori"></p>
+            <p class="pris"></p>
+            <p class="kortbeskrivelse"></p>
+            <p class="langbeskrivelse"></p>
+            <p class="oprindelsesregion"></p>
+        </article>
+    </template>
+
+    <script>
+        const url = "https://babushka-dd8a.restdb.io/rest/menu";
+        const medieurl = "https://babushka-dd8a.restdb.io/media/";
+        const options = {
+            headers: {
+                'x-apikey': "600ec2fb1346a1524ff12de4"
+            }
+        };
+
+        async function hentData() {
+            const resspons = await fetch(url, options);
+            const json = await resspons.json();
+            vis(json);
+        }
+
+        const main = document.querySelector("main");
+        const template = document.querySelector("template").content;
+
+
+
+        function vis(json) {
+            console.log("json")
+            json.forEach(ret => {
+                const klon = template.cloneNode(true);
+                klon.querySelector(".billede").src = medieurl + ret.billede[0];
+                klon.querySelector(".navn").textContent = ret.navn;
+                klon.querySelector(".kategori").textContent = ret.kategori;
+                klon.querySelector(".pris").textContent = "Pris: " + ret.pris + " kr.";
+                klon.querySelector(".kortbeskrivelse").textContent = ret.kortbeskrivelse;
+                klon.querySelector(".langbeskrivelse").textContent = ret.langbeskrivelse;
+                klon.querySelector(".oprindelsesregion").textContent = ret.oprindelsesregion;
+                main.appendChild(klon);
+            })
+        }
+
+        hentData();
+
+    </script>
+</body>
+
+</html>
